@@ -1,0 +1,23 @@
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
+public class Alerte {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String type;
+    private String message;
+    private String niveauGravite;
+    private LocalDateTime dateDetection;
+
+    public Alerte() {
+    }
+
+    // getters & setters
+}

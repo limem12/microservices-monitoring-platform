@@ -1,0 +1,16 @@
+package com.example.demo.entity;
+
+public class Snippet {
+	
+	└── src/main/java
+	    └── com.example.demo
+	        └── controller
+	            └── SurveillanceController.java
+	⚠️ TRÈS IMPORTANT
+
+	package DOIT commencer par com.example.demo
+	
+	2️⃣ Code CORRECT du controller (copie exacte)
+	👉 Le 
+}
+

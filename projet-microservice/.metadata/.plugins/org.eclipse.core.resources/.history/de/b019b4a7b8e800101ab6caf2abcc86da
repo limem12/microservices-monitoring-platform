@@ -1,0 +1,46 @@
+package com.example.demo.service;
+
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.Alerte;
+import com.example.demo.entity.MesureAnalyse;
+import com.example.demo.repository.AlerteRepository;
+import com.example.demo.repository.MesureAnalyseRepository;
+
+@Service
+public class SurveillanceService {
+
+    private final AlerteRepository alerteRepository;
+    private final MesureAnalyseRepository mesureRepository;
+
+    public SurveillanceService(AlerteRepository alerteRepository,
+                               MesureAnalyseRepository mesureRepository) {
+        this.alerteRepository = alerteRepository;
+        this.mesureRepository = mesureRepository;
+    }
+
+    public MesureAnalyse analyserMesure(MesureAnalyse mesure) {
+
+        // sécurité
+        if (mesure.getValeur() == null) {
+            throw new RuntimeException("Valeur ne peut pas être null");
+        }
+
+        mesure.setDate(LocalDateTime.now());
+        MesureAnalyse saved = mesureRepository.save(mesure);
+
+        if (mesure.getValeur() > 100) {
+            Alerte alerte = new Alerte();
+            alerte.setType("ANOMALIE");
+            alerte.setMessage("Valeur anormale détectée");
+            alerte.setNiveauGravite("CRITIQUE");
+            alerte.setDateDetection(LocalDateTime.now());
+
+            alerteRepository.save(alerte);
+        }
+
+        return saved;
+    }
+}

@@ -1,0 +1,12 @@
+spring.application.name=serveur-de-configuration
+server.port=8887
+spring.cloud.config.server.git.uri=https://github.com/limem12/anomaly-maintenance-system.git
+spring.cloud.config.server.git.username=entretien
+spring.cloud.config.server.git.password=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
+spring.cloud.config.server.git.default-label=main
+
+eureka.client.registerwithEureka=true
+eureka.client.fetch-registry=false
+eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+management.endpoints.web.exposure.include=refresh
+spring.config.import=optional:configserver:http://localhost:8887

@@ -1,0 +1,5 @@
+package com.example.maintenance.entity;
+
+public class TicketMaintenance {
+
+}

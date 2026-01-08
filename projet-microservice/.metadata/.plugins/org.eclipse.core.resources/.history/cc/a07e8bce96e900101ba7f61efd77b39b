@@ -1,0 +1,49 @@
+package com.example.demo.service;
+
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.Alerte;
+import com.example.demo.entity.MesureAnalyse;
+import com.example.demo.messaging.AlertePublisher;
+import com.example.demo.repository.AlerteRepository;
+import com.example.demo.repository.MesureAnalyseRepository;
+
+@Service
+public class SurveillanceService {
+
+    private final AlerteRepository alerteRepository;
+    private final MesureAnalyseRepository mesureRepository;
+    private final AlertePublisher alertePublisher;
+
+    public SurveillanceService(AlerteRepository alerteRepository,
+                               MesureAnalyseRepository mesureRepository,
+                               AlertePublisher alertePublisher) {
+        this.alerteRepository = alerteRepository;
+        this.mesureRepository = mesureRepository;
+        this.alertePublisher = alertePublisher;
+    }
+
+    public MesureAnalyse analyserMesure(MesureAnalyse mesure) {
+
+        mesure.setDate(LocalDateTime.now());
+        MesureAnalyse savedMesure = mesureRepository.save(mesure);
+
+        if (mesure.getValeur() != null && mesure.getValeur() > 100) {
+
+            Alerte alerte = new Alerte();
+            alerte.setType("ANOMALIE");
+            alerte.setMessage("Valeur anormale détectée");
+            alerte.setNiveauGravite("CRITIQUE");
+            alerte.setDateDetection(LocalDateTime.now());
+
+            Alerte savedAlerte = alerteRepository.save(alerte);
+
+            // 🔥 ENVOI AMQP
+            alertePublisher.envoyerAlerte(savedAlerte);
+        }
+
+        return savedMesure;
+    }
+}

@@ -1,0 +1,43 @@
+package com.example.demo.service;
+
+import com.example.demo.entity.Alerte;
+import com.example.demo.entity.MesureAnalyse;
+import com.example.demo.repository.AlerteRepository;
+import com.example.demo.repository.MesureAnalyseRepository;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+
+@Service
+public class SurveillanceService {
+
+    private final AlerteRepository alerteRepository;
+    private final MesureAnalyseRepository mesureRepository;
+
+    public SurveillanceService(AlerteRepository alerteRepository,
+                               MesureAnalyseRepository mesureRepository) {
+        this.alerteRepository = alerteRepository;
+        this.mesureRepository = mesureRepository;
+    }
+
+    public MesureAnalyse analyserMesure(MesureAnalyse mesure) {
+
+        // Sauvegarde de la mesure
+        mesure.setDate(LocalDateTime.now());
+        MesureAnalyse savedMesure = mesureRepository.save(mesure);
+
+        // Détection d'anomalie (logique simple)
+        if (mesure.getValeur() != null && mesure.getValeur() > 100) {
+
+            Alerte alerte = new Alerte();
+            alerte.setType("ANOMALIE");
+            alerte.setMessage("Valeur anormale détectée");
+            alerte.setNiveauGravite("CRITIQUE");
+            alerte.setDateDetection(LocalDateTime.now());
+
+            alerteRepository.save(alerte);
+        }
+
+        return savedMesure;
+    }
+}

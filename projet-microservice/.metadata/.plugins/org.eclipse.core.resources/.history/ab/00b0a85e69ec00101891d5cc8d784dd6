@@ -1,0 +1,11 @@
+server.port=8888
+spring.application.name=config-server
+
+
+eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+eureka.client.registerwithEureka=true
+eureka.client.fetch-registry=false
+management.endpoints.web.exposure.include=refresh
+spring.cloud.config.server.git.uri=https://github.com/limem12/système de maintenance des anomalies.git
+spring.cloud.config.server.git.username=entretien
+spring.cloud.config.server.git.password=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
